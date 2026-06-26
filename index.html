@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Uncharted / Ventures</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%230a0a0a'/%3E%3Ctext x='4' y='22' font-family='Georgia,serif' font-size='18' font-weight='400' fill='%23e8e6e3'%3EU%3C/text%3E%3Cline x1='20' y1='8' x2='16' y2='24' stroke='%239c3848' stroke-width='1.5'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111111;
+      --surface-2: #181818;
+      --border: rgba(255,255,255,0.06);
+      --border-hover: rgba(255,255,255,0.12);
+      --text: #e8e6e3;
+      --text-dim: rgba(255,255,255,0.5);
+      --text-faint: rgba(255,255,255,0.28);
+      --accent: #9c3848;
+      --accent-dim: rgba(156,56,72,0.15);
+      --glow: rgba(156,56,72,0.06);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* Grain overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+
+    .serif { font-family: 'Playfair Display', Georgia, serif; }
+
+    /* ---- NAV ---- */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 0 64px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(10,10,10,0.8);
+      backdrop-filter: blur(24px) saturate(1.2);
+      -webkit-backdrop-filter: blur(24px) saturate(1.2);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      text-decoration: none;
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .nav-right a {
+      text-decoration: none;
+      color: var(--text-dim);
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.03em;
+      transition: color 0.3s;
+    }
+
+    .nav-right a:hover { color: var(--text); }
+
+    .nav-cta {
+      color: var(--accent) !important;
+      border: 1px solid rgba(156,56,72,0.3);
+      padding: 8px 24px;
+      border-radius: 2px;
+      transition: all 0.3s !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--accent);
+      color: var(--bg) !important;
+      border-color: var(--accent);
+    }
+
+    /* ---- HERO ---- */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 64px;
+      max-width: 1400px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    /* Subtle ambient glow behind hero */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 20%;
+      right: 5%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(ellipse, rgba(156,56,72,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 32px;
+      font-weight: 500;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(44px, 5.5vw, 84px);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      max-width: 820px;
+      color: var(--text);
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      margin-top: 40px;
+      font-size: 17px;
+      font-weight: 300;
+      color: var(--text-dim);
+      max-width: 520px;
+      line-height: 1.7;
+      letter-spacing: 0.01em;
+    }
+
+    .hero-line {
+      width: 48px;
+      height: 1px;
+      background: var(--accent);
+      margin-top: 48px;
+      opacity: 0;
+      animation: lineGrow 1s 0.6s ease forwards;
+    }
+
+    @keyframes lineGrow {
+      to { opacity: 1; width: 48px; }
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 72px;
+      margin-top: 48px;
+    }
+
+    .stat {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.8s ease forwards;
+    }
+    .stat:nth-child(1) { animation-delay: 0.3s; }
+    .stat:nth-child(2) { animation-delay: 0.5s; }
+    .stat:nth-child(3) { animation-delay: 0.7s; }
+
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 36px;
+      font-weight: 400;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-faint);
+      margin-top: 6px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* Scroll indicator */
+    .scroll-hint {
+      position: absolute;
+      bottom: 48px;
+      left: 64px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--text-faint);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .scroll-line {
+      width: 32px;
+      height: 1px;
+      background: var(--text-faint);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scroll-line::after {
+      content: '';
+      position: absolute;
+      left: -100%;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--accent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+      0% { left: -100%; }
+      50% { left: 100%; }
+      100% { left: 100%; }
+    }
+
+    /* ---- DIVIDER ---- */
+    .divider {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 64px;
+    }
+
+    .divider-line {
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ---- CO-INVESTORS ---- */
+    .coinvestors {
+      padding: 80px 0;
+      overflow: hidden;
+    }
+
+    .coinvestors-label {
+      text-align: center;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 40px;
+    }
+
+    .marquee-wrap { overflow: hidden; }
+
+    .marquee-track {
+      display: flex;
+      gap: 80px;
+      animation: marquee 35s linear infinite;
+      width: max-content;
+      align-items: center;
+    }
+
+    .marquee-item {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 400;
+      color: var(--text-faint);
+      white-space: nowrap;
+      letter-spacing: 0.02em;
+      transition: color 0.3s;
+    }
+
+    .marquee-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--text-faint);
+      flex-shrink: 0;
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ---- SECTIONS ---- */
+    .section {
+      padding: 140px 64px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      margin-bottom: 80px;
+    }
+
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(32px, 3.5vw, 52px);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      max-width: 600px;
+    }
+
+    /* ---- THESIS ---- */
+    .thesis-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .thesis-card {
+      background: var(--bg);
+      padding: 56px 48px;
+      position: relative;
+      transition: background 0.4s;
+    }
+
+    .thesis-card:hover {
+      background: var(--surface);
+    }
+
+    .thesis-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 48px;
+      right: 48px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .thesis-card:hover::before { opacity: 0.4; }
+
+    .thesis-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 14px;
+      color: var(--accent);
+      margin-bottom: 32px;
+      font-style: italic;
+    }
+
+    .thesis-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      margin-bottom: 16px;
+      line-height: 1.3;
+    }
+
+    .thesis-card p {
+      font-size: 14px;
+      color: var(--text-dim);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    /* ---- PORTFOLIO ---- */
+    .portfolio-filters {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      padding: 8px 20px;
+      font-size: 12px;
+      font-family: 'Inter', sans-serif;
+      color: var(--text-dim);
+      cursor: pointer;
+      transition: all 0.3s;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--border-hover);
+      color: var(--text);
+    }
+
+    .filter-btn.active {
+      background: var(--accent);
+      color: var(--bg);
+      border-color: var(--accent);
+    }
+
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .company-card {
+      background: var(--bg);
+      padding: 36px 32px;
+      transition: all 0.4s;
+      cursor: default;
+      position: relative;
+    }
+
+    .company-card:hover {
+      background: var(--surface);
+    }
+
+    .company-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 32px;
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      transition: width 0.5s ease;
+    }
+
+    .company-card:hover::after { width: calc(100% - 64px); }
+
+    .company-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      margin-bottom: 8px;
+    }
+
+    .company-category {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-faint);
+      margin-bottom: 12px;
+    }
+
+    .company-desc {
+      font-size: 13px;
+      color: var(--text-dim);
+      line-height: 1.5;
+      font-weight: 300;
+    }
+
+    .company-outcome {
+      margin-top: 16px;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+    }
+
+    .company-outcome.acquired-badge {
+      color: var(--accent);
+    }
+
+    /* ---- NEWS ---- */
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .news-card {
+      background: var(--bg);
+      padding: 48px 40px;
+      transition: background 0.4s;
+      position: relative;
+    }
+
+    .news-card:hover { background: var(--surface); }
+
+    .news-date {
+      font-size: 11px;
+      color: var(--text-faint);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .news-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    .news-card p {
+      font-size: 14px;
+      color: var(--text-dim);
+      line-height: 1.6;
+      font-weight: 300;
+    }
+
+    .news-tag {
+      display: inline-block;
+      margin-top: 24px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 6px 14px;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+    }
+
+    .news-tag.acquired { border-color: rgba(156,56,72,0.3); color: var(--accent); }
+    .news-tag.series-b { border-color: rgba(156,56,72,0.3); color: var(--accent); }
+
+    /* ---- TEAM ---- */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      max-width: 720px;
+    }
+
+    .team-card {
+      background: var(--bg);
+      padding: 56px 48px;
+      transition: background 0.4s;
+    }
+
+    .team-card:hover { background: var(--surface); }
+
+    .team-initials {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      font-weight: 400;
+      color: var(--accent);
+      margin-bottom: 24px;
+      font-style: italic;
+    }
+
+    .team-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 400;
+      margin-bottom: 4px;
+    }
+
+    .team-role {
+      font-size: 13px;
+      color: var(--text-dim);
+      font-weight: 300;
+      margin-bottom: 8px;
+    }
+
+    .team-bio {
+      font-size: 12px;
+      color: var(--text-faint);
+      font-weight: 300;
+      font-style: italic;
+      letter-spacing: 0.02em;
+      margin-bottom: 20px;
+    }
+
+    .team-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-faint);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+
+    .team-link:hover { color: var(--accent); }
+
+    .team-link svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* ---- CTA ---- */
+    .cta {
+      padding: 200px 64px;
+      max-width: 1400px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+    }
+
+    .cta::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(ellipse, rgba(156,56,72,0.04) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .cta h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(36px, 4.5vw, 64px);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .cta h2 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .cta p {
+      font-size: 16px;
+      color: var(--text-dim);
+      font-weight: 300;
+      margin-bottom: 48px;
+      position: relative;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      padding: 16px 48px;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 500;
+      transition: all 0.4s;
+      position: relative;
+    }
+
+    .cta-btn:hover {
+      background: var(--accent);
+      color: var(--bg);
+    }
+
+    /* ---- FOOTER ---- */
+    footer {
+      padding: 40px 64px;
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-left {
+      font-size: 12px;
+      color: var(--text-faint);
+      letter-spacing: 0.04em;
+    }
+
+    .footer-right {
+      display: flex;
+      gap: 32px;
+    }
+
+    .footer-right a {
+      font-size: 12px;
+      color: var(--text-faint);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: color 0.3s;
+    }
+
+    .footer-right a:hover { color: var(--text-dim); }
+
+    /* ---- ANIMATIONS ---- */
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Stagger children */
+    .reveal-stagger > * {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal-stagger.visible > *:nth-child(1) { transition-delay: 0s; opacity: 1; transform: translateY(0); }
+    .reveal-stagger.visible > *:nth-child(2) { transition-delay: 0.08s; opacity: 1; transform: translateY(0); }
+    .reveal-stagger.visible > *:nth-child(3) { transition-delay: 0.16s; opacity: 1; transform: translateY(0); }
+    .reveal-stagger.visible > *:nth-child(4) { transition-delay: 0.24s; opacity: 1; transform: translateY(0); }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 1024px) {
+      nav { padding: 0 32px; }
+      .hero { padding: 0 32px; }
+      .section { padding: 100px 32px; }
+      .cta { padding: 140px 32px; }
+      footer { padding: 32px; }
+      .divider { padding: 0 32px; }
+      .portfolio-grid { grid-template-columns: repeat(3, 1fr); }
+      .scroll-hint { left: 32px; }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 24px; height: 60px; }
+      .nav-right a:not(.nav-cta) { display: none; }
+      .nav-right { gap: 0; }
+      .hero { padding: 0 24px; }
+      .hero h1 { font-size: 36px; }
+      .hero-stats { gap: 40px; flex-wrap: wrap; }
+      .section { padding: 80px 24px; }
+      .thesis-grid { grid-template-columns: 1fr; }
+      .portfolio-grid { grid-template-columns: repeat(2, 1fr); }
+      .news-grid { grid-template-columns: 1fr; }
+      .team-grid { grid-template-columns: 1fr; max-width: 100%; }
+      .cta { padding: 100px 24px; }
+      footer { padding: 24px; flex-direction: column; gap: 16px; }
+      .divider { padding: 0 24px; }
+      .scroll-hint { left: 24px; bottom: 32px; }
+    }
+
+    @media (max-width: 480px) {
+      .portfolio-grid { grid-template-columns: 1fr; }
+      .stat-number { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="#" class="nav-logo">
+      <span>Uncharted <span style="color:var(--accent);font-weight:300;margin:0 2px">/</span> Ventures</span>
+    </a>
+    <div class="nav-right">
+      <a href="#thesis">Thesis</a>
+      <a href="#portfolio">Portfolio</a>
+      <a href="#news">News</a>
+      <a href="#team">Team</a>
+      <a href="mailto:kevin@unchartedv.com" class="nav-cta">Contact</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-eyebrow">Pre-Seed &middot; Seed &middot; Series A</div>
+    <h1>Backing <em>data-native</em> founders from the earliest stages</h1>
+    <p class="hero-sub">We invest in thoughtful founders who leverage data, ML, and AI to fundamentally change the way we live and work.</p>
+    <div class="hero-line"></div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-number">40+</div>
+        <div class="stat-label">Portfolio Companies</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">$500M+</div>
+        <div class="stat-label">Follow-on Raised</div>
+      </div>
+    </div>
+    <div class="scroll-hint">
+      <div class="scroll-line"></div>
+      Scroll
+    </div>
+  </section>
+
+  <div class="divider"><div class="divider-line"></div></div>
+
+  <section class="coinvestors">
+    <div class="coinvestors-label">Alongside Leading Firms</div>
+    <div class="marquee-wrap">
+      <div class="marquee-track">
+        <span class="marquee-item">Sequoia</span><span class="marquee-dot"></span>
+        <span class="marquee-item">Andreessen Horowitz</span><span class="marquee-dot"></span>
+        <span class="marquee-item">Tribe Capital</span><span class="marquee-dot"></span>
+        <span class="marquee-item">Spark Capital</span><span class="marquee-dot"></span>
+        <span class="marquee-item">Initial Capital</span><span class="marquee-dot"></span>
+        <span class="marquee-item">Sierra Ventures</span><span class="marquee-dot"></span>
+        <span class="marquee-item">Bragiel Brothers</span><span class="marquee-dot"></span>
+        <span class="marquee-item">Google Ventures</span><span class="marquee-dot"></span>
+        <span class="marquee-item">Sequoia</span><span class="marquee-dot"></span>
+        <span class="marquee-item">Andreessen Horowitz</span><span class="marquee-dot"></span>
+        <span class="marquee-item">Tribe Capital</span><span class="marquee-dot"></span>
+        <span class="marquee-item">Spark Capital</span><span class="marquee-dot"></span>
+        <span class="marquee-item">Initial Capital</span><span class="marquee-dot"></span>
+        <span class="marquee-item">Sierra Ventures</span><span class="marquee-dot"></span>
+        <span class="marquee-item">Bragiel Brothers</span><span class="marquee-dot"></span>
+        <span class="marquee-item">Google Ventures</span><span class="marquee-dot"></span>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="divider-line"></div></div>
+
+  <section class="section reveal" id="thesis">
+    <div class="section-header">
+      <div class="section-label">Investment Thesis</div>
+      <h2 class="section-title">We look for conviction, not consensus</h2>
+    </div>
+    <div class="thesis-grid reveal-stagger">
+      <div class="thesis-card">
+        <div class="thesis-number">i.</div>
+        <h3>Data &amp; AI First</h3>
+        <p>Companies where data and machine learning aren't features — they're the foundation. Teams that build compounding moats from day one.</p>
+      </div>
+      <div class="thesis-card">
+        <div class="thesis-number">ii.</div>
+        <h3>Thoughtful Founders</h3>
+        <p>Deep domain expertise and strong conviction. Operators who understand the problem space intimately and build with intention.</p>
+      </div>
+      <div class="thesis-card">
+        <div class="thesis-number">iii.</div>
+        <h3>Step-Change Impact</h3>
+        <p>Not incremental improvement. We seek companies that fundamentally shift how industries operate — rewriting the rules, not optimizing them.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="divider-line"></div></div>
+
+  <section class="section reveal" id="news">
+    <div class="section-header">
+      <div class="section-label">Recent</div>
+      <h2 class="section-title">Portfolio news</h2>
+    </div>
+    <div class="news-grid">
+      <div class="news-card">
+        <div class="news-date">November 2024</div>
+        <h3>Roboflow raises $40M Series B</h3>
+        <p>Led by Google Ventures, continuing to build the infrastructure layer for computer vision.</p>
+        <span class="news-tag series-b">Series B</span>
+      </div>
+      <div class="news-card">
+        <div class="news-date">October 2024</div>
+        <h3>Causal acquired by Lucanet</h3>
+        <p>Next-gen financial modeling finds its home with European FP&amp;A leader Lucanet.</p>
+        <span class="news-tag acquired">Acquired</span>
+      </div>
+      <div class="news-card">
+        <div class="news-date">October 2024</div>
+        <h3>UpLink acquired by DataSnipper</h3>
+        <p>Intelligent document processing meets audit automation in a strategic acquisition.</p>
+        <span class="news-tag acquired">Acquired</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="divider-line"></div></div>
+
+  <section class="section reveal" id="portfolio">
+    <div class="section-header">
+      <div class="section-label">Portfolio</div>
+      <h2 class="section-title">Select investments</h2>
+    </div>
+    <div class="portfolio-filters">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="ai">AI / ML</button>
+      <button class="filter-btn" data-filter="data">Data Infra</button>
+      <button class="filter-btn" data-filter="fintech">Fintech</button>
+      <button class="filter-btn" data-filter="devtools">DevTools</button>
+      <button class="filter-btn" data-filter="enterprise">Enterprise</button>
+      <button class="filter-btn" data-filter="healthcare">Healthcare</button>
+      <button class="filter-btn" data-filter="acquired">Acquired</button>
+    </div>
+    <div class="portfolio-grid" id="portfolioGrid">
+      <div class="company-card" data-filter="devtools">
+        <div class="company-name">Retool</div>
+        <div class="company-category">DevTools</div>
+        <div class="company-desc">Internal tool builder for engineering teams</div>
+        <div class="company-outcome">Growth Stage</div>
+      </div>
+      <div class="company-card" data-filter="ai">
+        <div class="company-name">Roboflow</div>
+        <div class="company-category">AI / ML</div>
+        <div class="company-desc">Computer vision infrastructure and tools</div>
+        <div class="company-outcome">$40M Series B</div>
+      </div>
+      <div class="company-card" data-filter="fintech">
+        <div class="company-name">Vise</div>
+        <div class="company-category">Fintech</div>
+        <div class="company-desc">AI-powered investment management</div>
+        <div class="company-outcome">Growth Stage</div>
+      </div>
+      <div class="company-card" data-filter="data">
+        <div class="company-name">Hightouch</div>
+        <div class="company-category">Data Infra</div>
+        <div class="company-desc">Reverse ETL and data activation</div>
+        <div class="company-outcome">Growth Stage</div>
+      </div>
+      <div class="company-card" data-filter="enterprise">
+        <div class="company-name">Graphite / Cursor</div>
+        <div class="company-category">Enterprise</div>
+        <div class="company-desc">Code review and developer productivity</div>
+        <div class="company-outcome">Growth Stage</div>
+      </div>
+      <div class="company-card" data-filter="enterprise">
+        <div class="company-name">Certn</div>
+        <div class="company-category">Enterprise</div>
+        <div class="company-desc">AI-powered background screening</div>
+        <div class="company-outcome">Growth Stage</div>
+      </div>
+      <div class="company-card" data-filter="enterprise">
+        <div class="company-name">BioRender</div>
+        <div class="company-category">Enterprise</div>
+        <div class="company-desc">Scientific illustration platform</div>
+        <div class="company-outcome">Growth Stage</div>
+      </div>
+      <div class="company-card" data-filter="enterprise">
+        <div class="company-name">Culture Biosciences</div>
+        <div class="company-category">Biotech</div>
+        <div class="company-desc">Cloud bioreactor platform</div>
+        <div class="company-outcome">Growth Stage</div>
+      </div>
+      <div class="company-card" data-filter="fintech">
+        <div class="company-name">Snapdocs</div>
+        <div class="company-category">Fintech</div>
+        <div class="company-desc">Digital closing for mortgages</div>
+        <div class="company-outcome">Growth Stage</div>
+      </div>
+      <div class="company-card" data-filter="fintech">
+        <div class="company-name">Openly</div>
+        <div class="company-category">Insurtech</div>
+        <div class="company-desc">Premium homeowners insurance</div>
+        <div class="company-outcome">Growth Stage</div>
+      </div>
+      <div class="company-card" data-filter="devtools">
+        <div class="company-name">Lob</div>
+        <div class="company-category">DevTools</div>
+        <div class="company-desc">APIs for automated direct mail</div>
+        <div class="company-outcome">Growth Stage</div>
+      </div>
+      <div class="company-card" data-filter="acquired">
+        <div class="company-name">Seldon</div>
+        <div class="company-category">AI / ML</div>
+        <div class="company-desc">ML deployment and monitoring at scale</div>
+        <div class="company-outcome acquired-badge">Acquired</div>
+      </div>
+      <div class="company-card" data-filter="devtools">
+        <div class="company-name">Alloy Automation</div>
+        <div class="company-category">DevTools</div>
+        <div class="company-desc">Embedded integrations for SaaS</div>
+        <div class="company-outcome">Growth Stage</div>
+      </div>
+      <div class="company-card" data-filter="fintech">
+        <div class="company-name">Doorvest</div>
+        <div class="company-category">Proptech</div>
+        <div class="company-desc">Turnkey real estate investing</div>
+        <div class="company-outcome">Growth Stage</div>
+      </div>
+      <div class="company-card" data-filter="enterprise">
+        <div class="company-name">Appcues</div>
+        <div class="company-category">Enterprise</div>
+        <div class="company-desc">Product-led growth and onboarding</div>
+        <div class="company-outcome">Growth Stage</div>
+      </div>
+      <div class="company-card" data-filter="ai">
+        <div class="company-name">HiOperator</div>
+        <div class="company-category">AI / ML</div>
+        <div class="company-desc">AI-powered customer support ops</div>
+        <div class="company-outcome">Growth Stage</div>
+      </div>
+      <div class="company-card" data-filter="enterprise">
+        <div class="company-name">Twelve</div>
+        <div class="company-category">Climate Tech</div>
+        <div class="company-desc">CO2 to chemicals and fuels</div>
+        <div class="company-outcome">Growth Stage</div>
+      </div>
+      <div class="company-card" data-filter="ai">
+        <div class="company-name">Datasaur</div>
+        <div class="company-category">AI / ML</div>
+        <div class="company-desc">Data labeling and NLP workspace</div>
+        <div class="company-outcome">Early Stage</div>
+      </div>
+      <div class="company-card" data-filter="ai">
+        <div class="company-name">Meticulous</div>
+        <div class="company-category">DevTools</div>
+        <div class="company-desc">Automated frontend testing via AI</div>
+        <div class="company-outcome">Early Stage</div>
+      </div>
+      <div class="company-card" data-filter="fintech">
+        <div class="company-name">Tabs</div>
+        <div class="company-category">Fintech</div>
+        <div class="company-desc">Revenue automation for B2B billing</div>
+        <div class="company-outcome">Early Stage</div>
+      </div>
+      <div class="company-card" data-filter="data">
+        <div class="company-name">Stream</div>
+        <div class="company-category">Data Infra</div>
+        <div class="company-desc">Chat and activity feed APIs</div>
+        <div class="company-outcome">Early Stage</div>
+      </div>
+      <div class="company-card" data-filter="ai">
+        <div class="company-name">BoldMetrics</div>
+        <div class="company-category">AI / ML</div>
+        <div class="company-desc">AI-powered body data for apparel</div>
+        <div class="company-outcome">Early Stage</div>
+      </div>
+      <div class="company-card" data-filter="healthcare">
+        <div class="company-name">Honeybee Health</div>
+        <div class="company-category">Healthcare</div>
+        <div class="company-desc">Online pharmacy, transparent pricing</div>
+        <div class="company-outcome">Early Stage</div>
+      </div>
+      <div class="company-card" data-filter="enterprise">
+        <div class="company-name">Token Transit</div>
+        <div class="company-category">Transportation</div>
+        <div class="company-desc">Mobile payments for public transit</div>
+        <div class="company-outcome">Early Stage</div>
+      </div>
+      <div class="company-card" data-filter="acquired">
+        <div class="company-name">Causal</div>
+        <div class="company-category">Fintech</div>
+        <div class="company-desc">Next-gen financial modeling</div>
+        <div class="company-outcome acquired-badge">Acquired by Lucanet</div>
+      </div>
+      <div class="company-card" data-filter="acquired">
+        <div class="company-name">UpLink</div>
+        <div class="company-category">AI / Fintech</div>
+        <div class="company-desc">Intelligent document processing</div>
+        <div class="company-outcome acquired-badge">Acquired by DataSnipper</div>
+      </div>
+      <div class="company-card" data-filter="acquired">
+        <div class="company-name">OkayHQ</div>
+        <div class="company-category">Data Infra</div>
+        <div class="company-desc">Engineering analytics and insights</div>
+        <div class="company-outcome acquired-badge">Acquired by Stripe</div>
+      </div>
+      <div class="company-card" data-filter="acquired">
+        <div class="company-name">TruePlan</div>
+        <div class="company-category">Data Infra</div>
+        <div class="company-desc">Compensation planning and data</div>
+        <div class="company-outcome acquired-badge">Acquired</div>
+      </div>
+      <div class="company-card" data-filter="acquired">
+        <div class="company-name">Level</div>
+        <div class="company-category">Fintech</div>
+        <div class="company-desc">Benefits platform for modern teams</div>
+        <div class="company-outcome acquired-badge">Acquired</div>
+      </div>
+      <div class="company-card" data-filter="acquired">
+        <div class="company-name">RideReport</div>
+        <div class="company-category">Transportation</div>
+        <div class="company-desc">Mobility data platform for cities</div>
+        <div class="company-outcome acquired-badge">Acquired</div>
+      </div>
+      <div class="company-card" data-filter="acquired">
+        <div class="company-name">Purpose Finance</div>
+        <div class="company-category">Fintech</div>
+        <div class="company-desc">Financial products platform</div>
+        <div class="company-outcome acquired-badge">Acquired by Scale.com</div>
+      </div>
+      <div class="company-card" data-filter="acquired">
+        <div class="company-name">Tendies</div>
+        <div class="company-category">Consumer Fintech</div>
+        <div class="company-desc">Consumer fintech platform</div>
+        <div class="company-outcome acquired-badge">Acquired</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="divider-line"></div></div>
+
+  <section class="section reveal" id="team">
+    <div class="section-header">
+      <div class="section-label">Team</div>
+      <h2 class="section-title">Who we are</h2>
+    </div>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-initials">KL</div>
+        <h3>Kevin Liu</h3>
+        <div class="team-role">General Partner</div>
+        <div class="team-bio">Salmon Labs, Techstars</div>
+        <a href="https://linkedin.com/in/ckevinliu" class="team-link" target="_blank">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          LinkedIn
+        </a>
+      </div>
+      <div class="team-card">
+        <div class="team-initials">CY</div>
+        <h3>Chris Yin</h3>
+        <div class="team-role">General Partner</div>
+        <div class="team-bio">Plume Network, Coupa Software</div>
+        <a href="https://linkedin.com/in/chrisyin" class="team-link" target="_blank">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          LinkedIn
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="divider-line"></div></div>
+
+  <section class="cta reveal">
+    <h2>Working on something <em>interesting?</em></h2>
+    <p>We respond to every email.</p>
+    <a href="mailto:kevin@unchartedv.com" class="cta-btn">Get in Touch</a>
+  </section>
+
+  <footer>
+    <div class="footer-left">&copy; 2024 Uncharted / Ventures</div>
+    <div class="footer-right">
+      <a href="https://linkedin.com/company/unchartedventures" target="_blank">LinkedIn</a>
+      <a href="mailto:kevin@unchartedv.com">Email</a>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => io.observe(el));
+
+    // Portfolio filter
+    const btns = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('.company-card');
+    cards.forEach(c => c.style.transition = 'opacity 0.4s, transform 0.4s, background 0.4s');
+
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        btns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const f = btn.dataset.filter;
+        cards.forEach(card => {
+          const show = f === 'all' || card.dataset.filter === f;
+          if (show) {
+            card.style.display = '';
+            requestAnimationFrame(() => { card.style.opacity = '1'; card.style.transform = 'none'; });
+          } else {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(8px)';
+            setTimeout(() => card.style.display = 'none', 300);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
